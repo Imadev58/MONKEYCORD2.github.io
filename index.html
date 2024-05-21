@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma 246 YouTube Channel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #87CEEB, #000000); /* Baby blue mixed with black gradient background */
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        section {
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        #subscribeBtn {
+            background-color: #f00;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #subscribeBtn:hover {
+            background-color: #900;
+        }
+
+        #videoContainer a {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sigma 246 YouTube Channel</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        <h2>Welcome to Sigma 246 Channel</h2>
+        <p>Subscribe to stay updated!</p>
+        <button id="subscribeBtn">Subscribe</button>
+        <p id="subscribersCount">Loading...</p>
+    </section>
+
+    <section id="videos">
+        <h2>Videos</h2>
+        <div id="videoContainer"></div>
+    </section>
+
+    <section id="about">
+        <h2>About</h2>
+        <p>About content goes here.</p>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const subscribersCount = document.getElementById("subscribersCount");
+            const subscribeBtn = document.getElementById("subscribeBtn");
+            const videoContainer = document.getElementById("videoContainer");
+
+            // Function to fetch subscriber count
+            function fetchSubscriberCount() {
+                subscribersCount.textContent = "Loading...";
+                // Simulate fetching subscriber count (replace with actual fetch request)
+                setTimeout(() => {
+                    subscribersCount.textContent = "300"; // Example subscriber count
+                }, 2000); // Simulated delay
+            }
+
+            // Function to fetch videos from YouTube channel
+            function fetchVideos() {
+                // Simulate fetching videos (replace with actual fetch request)
+                setTimeout(() => {
+                    // Example video data
+                    const videos = [
+                        { title: "Video 1", url: "https://www.youtube.com/watch?v=123" },
+                        { title: "Video 2", url: "https://www.youtube.com/watch?v=456" },
+                        { title: "Video 3", url: "https://www.youtube.com/watch?v=789" }
+                    ];
+                    // Display videos
+                    videos.forEach(video => {
+                        const link = document.createElement("a");
+                        link.textContent = video.title;
+                        link.href = video.url;
+                        link.target = "_blank"; // Open in new tab
+                        videoContainer.appendChild(link);
+                    });
+                }, 3000); // Simulated delay
+            }
+
+            // Event listener for subscribe button click
+            subscribeBtn.addEventListener("click", () => {
+                // Simulate subscription confirmation
+                setTimeout(() => {
+                    fetchSubscriberCount();
+                }, 2000); // Simulated delay
+            });
+
+            // Fetch subscriber count and videos on page load
+            fetchSubscriberCount();
+            fetchVideos();
+        });
+    </script>
+</body>
+</html>
