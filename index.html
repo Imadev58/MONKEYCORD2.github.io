@@ -1,139 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sigma 246 YouTube Channel</title>
+    <title>Discord Clone</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #87CEEB, #000000); /* Baby blue mixed with black gradient background */
+            font: 13px Arial, sans-serif;
+            background-color: #2c2f33;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            width: 100%;
-            text-align: center;
-        }
-
-        nav ul {
-            list-style-type: none;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
-
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
+        #chat-container {
+            width: 50%;
+            height: 70%;
+            background-color: #23272a;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
+        #messages {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
         }
-
-        section {
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
+        #form {
+            display: flex;
+            background-color: #2c2f33;
+            padding: 10px;
         }
-
-        #subscribeBtn {
-            background-color: #f00;
-            color: #fff;
-            padding: 10px 20px;
+        #input {
+            flex-grow: 1;
+            padding: 10px;
             border: none;
-            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
         }
-
-        #subscribeBtn:hover {
-            background-color: #900;
+        button {
+            padding: 10px;
+            background-color: #7289da;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
         }
-
-        #videoContainer {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: left;
+        li {
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+        .message-header {
+            font-weight: bold;
+        }
+        .message-time {
+            font-size: 0.8em;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Sigma 246 YouTube Channel</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#videos">Videos</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section id="home">
-        <h2>Welcome to Sigma 246 Channel</h2>
-        <p>Subscribe to stay updated!</p>
-        <a href="https://www.youtube.com/channel/UC9MkiBC_qFaO3v90Q9Kqitw" target="_blank" id="subscribeBtn">Subscribe</a>
-        <p id="subscribersCount">Loading...</p>
-    </section>
-
-    <section id="videos">
-        <h2>Videos</h2>
-        <div id="videoContainer"></div>
-    </section>
-
-    <section id="about">
-        <h2>About</h2>
-        <p>About content goes here.</p>
-    </section>
-
+    <div id="chat-container">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" placeholder="Enter your message..." />
+            <button>Send</button>
+        </form>
+    </div>
+    
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const subscribersCount = document.getElementById("subscribersCount");
-            const videoContainer = document.getElementById("videoContainer");
-
-            // Function to fetch subscriber count
-            function fetchSubscriberCount() {
-                subscribersCount.textContent = "Loading...";
-                // Simulate fetching subscriber count (replace with actual fetch request)
-                setTimeout(() => {
-                    subscribersCount.textContent = "300"; // Example subscriber count
-                }, 2000); // Simulated delay
+        var socket = io();
+        
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        var messages = document.getElementById('messages');
+        
+        var username = prompt("Enter your username:");
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                var message = {
+                    username: username,
+                    text: input.value,
+                    time: new Date().toLocaleTimeString()
+                };
+                socket.emit('chat message', message);
+                input.value = '';
             }
+        });
 
-            // Function to fetch videos from YouTube channel
-            function fetchVideos() {
-                // Simulate fetching videos (replace with actual fetch request)
-                setTimeout(() => {
-                    // Example video data
-                    const videos = [
-                        { title: "Video 1", url: "https://www.youtube.com/watch?v=123" },
-                        { title: "Video 2", url: "https://www.youtube.com/watch?v=456" },
-                        { title: "Video 3", url: "https://www.youtube.com/watch?v=789" }
-                    ];
-                    // Display videos
-                    videos.forEach(video => {
-                        const link = document.createElement("a");
-                        link.textContent = video.title;
-                        link.href = video.url;
-                        link.target = "_blank"; // Open in new tab
-                        videoContainer.appendChild(link);
-                    });
-                }, 3000); // Simulated delay
-            }
-
-            // Fetch subscriber count and videos on page load
-            fetchSubscriberCount();
-            fetchVideos();
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            var header = document.createElement('div');
+            header.className = 'message-header';
+            header.textContent = msg.username + ' - ';
+            var time = document.createElement('span');
+            time.className = 'message-time';
+            time.textContent = msg.time;
+            header.appendChild(time);
+            var text = document.createElement('div');
+            text.textContent = msg.text;
+            item.appendChild(header);
+            item.appendChild(text);
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
         });
     </script>
 </body>
